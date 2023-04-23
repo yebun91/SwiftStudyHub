@@ -9,15 +9,25 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    @IBOutlet weak var diceImageViewOne: UIImageView!
-    @IBOutlet weak var diceImageViewTwo: UIImageView!
+    // 이미지 변수 지정
+    @IBOutlet weak var diceImageView1: UIImageView!
+    @IBOutlet weak var diceImageView2: UIImageView!
+    
+    let diceImage = [UIImage(named:"DiceOne"),
+                     UIImage(named:"DiceTwo"),
+                     UIImage(named:"DiceThree"),
+                     UIImage(named:"DiceFour"),
+                     UIImage(named:"DiceFive"),
+                     UIImage(named: "DiceSix") ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
-
-
+    
+    @IBAction func rollButtonPressed(_ sender: UIButton) {
+        // 주사위 이미지를 변경
+        diceImageView1.image = diceImage[Int.random(in: 0...5)]
+        diceImageView2.image = diceImage[Int.random(in: 0...5)]
+    }
 }
 

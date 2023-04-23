@@ -44,14 +44,17 @@
                                     <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="30"/>
                                     <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="rollButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yMW-Z2-NLl"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
-                        <outlet property="diceImageView1" destination="CrS-nA-ix9" id="lv7-rA-ln8"/>
-                        <outlet property="diceImageView2" destination="DzO-AT-urv" id="ZYB-hl-n5y"/>
+                        <outlet property="diceImageView1" destination="CrS-nA-ix9" id="0Py-2U-uu2"/>
+                        <outlet property="diceImageView2" destination="DzO-AT-urv" id="r05-Ym-HIN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
