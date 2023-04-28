@@ -11,25 +11,35 @@ import UIKit
 class ViewController: UIViewController {
     
     @IBOutlet weak var text: UILabel!
+    @IBOutlet weak var progress: UIProgressView!
     
-    let eggTimes = ["Soft" : 5, "Medium" : 7, "Hard" : 12]
-    var timer = Timer()
-    
-    @IBAction func hardnessSelected(_ sender: UIButton) {
-        var sec = eggTimes[sender.currentTitle!]!
+    let eggTimes = ["Soft": 3, "Medium": 4, "Hard": 7]
+        var timer = Timer()
+        var totalTime = 0
+        var secondsPassed = 0
         
-        timer.invalidate()
+        @IBAction func hardnessSelected(_ sender: UIButton) {
+            
+            timer.invalidate()
+            let hardness = sender.currentTitle!
+            totalTime = eggTimes[hardness]!
 
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats:true){ timer in
-            print(sec)
-            if sec == 0 {
+            progress.progress = 0.0
+            secondsPassed = 0
+            text.text = hardness
+
+            timer = Timer.scheduledTimer(timeInterval: 1.0, target:self, selector: #selector(updateTimer), userInfo:nil, repeats: true)
+        }
+        
+        @objc func updateTimer() {
+            if secondsPassed < totalTime {
+                secondsPassed += 1
+                progress.progress = Float(secondsPassed) / Float(totalTime)
+                print(Float(secondsPassed) / Float(totalTime))
+            } else {
                 timer.invalidate()
-                self.text.text = "완료"
-            }else{
-                self.text.text = "\(sec)"
-                sec-=1
+                text.text = "DONE!"
             }
         }
-    }
     
 }
