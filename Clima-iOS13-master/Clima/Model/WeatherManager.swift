@@ -14,11 +14,12 @@ struct WeatherManager {
 
     func fetchCity(cityName: String) {
         let urlString = "\(cityURL)&q=\(cityName)"
-        performRequest(urlString: urlString)
+//        performRequest(urlString: urlString)
     }
 
-    func fetchWeather(lat: Float, lon: Float) {
-        let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)"
+    func fetchWeather(lat _: Float, lon _: Float) {
+//        let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)"
+        let urlString = "\(weatherURL)&lat=37.5666791&lon=126.9782914"
         performRequest(urlString: urlString)
     }
 
@@ -29,22 +30,29 @@ struct WeatherManager {
             let session = URLSession(configuration: .default)
 
             // 3. give the session a task
-            let task = session.dataTask(with: url, completionHandler: handle(data: response: error:))
+            let task = session.dataTask(with: url) { data, _, error in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+
+                if let safeData = data {
+                    parseJSON(weatherData: safeData)
+                }
+            }
 
             // 4. start the task
             task.resume()
         }
     }
 
-    func handle(data: Data?, response _: URLResponse?, error: Error?) {
-        if error != nil {
-            print(error!)
-            return
-        }
-
-        if let safeData = data {
-            let dataString = String(data: safeData, encoding: .utf8)
-            print(dataString)
+    func parseJSON(weatherData: Data) {
+        let decoder = JSONDecoder()
+        do {
+            let decodeData = try decoder.decode(WeatherData.self, from: weatherData)
+            print(decodeData)
+        } catch {
+            print(error)
         }
     }
 }
