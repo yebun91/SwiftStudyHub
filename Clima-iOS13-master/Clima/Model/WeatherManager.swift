@@ -9,7 +9,8 @@
 import Foundation
 
 protocol WeatherManagerDelegate {
-    func didUpdateWeather(weather: WeatherModel)
+    func didUpdateWeather(weatherManager:WeatherManager,  weather: WeatherModel)
+    func didfailWithError(error: Error)
 }
 
 struct WeatherManager {
@@ -26,10 +27,10 @@ struct WeatherManager {
     func fetchWeather(lat _: Float, lon _: Float) {
 //        let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)"
         let urlString = "\(weatherURL)&lat=37.5666791&lon=126.9782914"
-        performRequest(urlString: urlString)
+        performRequest(with: urlString)
     }
 
-    func performRequest(urlString: String) {
+    func performRequest(with urlString: String) {
         // 1. create a url
         if let url = URL(string: urlString) {
             // 2. create a urlSession
@@ -38,13 +39,13 @@ struct WeatherManager {
             // 3. give the session a task
             let task = session.dataTask(with: url) { data, _, error in
                 if error != nil {
-                    print(error!)
+                    self.delegate?.didfailWithError(error: error!)
                     return
                 }
 
                 if let safeData = data {
-                    if let weather = parseJSON(weatherData: safeData) {
-                        self.delegate?.didUpdateWeather(weather: weather)
+                    if let weather = parseJSON(safeData) {
+                        self.delegate?.didUpdateWeather(weatherManager: self ,weather: weather)
                     }
                 }
             }
@@ -54,7 +55,7 @@ struct WeatherManager {
         }
     }
 
-    func parseJSON(weatherData: Data) -> WeatherModel? {
+    func parseJSON(_ weatherData: Data) -> WeatherModel? {
         let decoder = JSONDecoder()
         do {
             let decodeData = try decoder.decode(WeatherData.self, from: weatherData)
@@ -65,6 +66,7 @@ struct WeatherManager {
             let weather = WeatherModel(conditionId: id, cityName: name, temperature: temp)
             return weather
         } catch {
+            self.delegate?.didfailWithError(error: error)
             return nil
         }
     }
