@@ -9,12 +9,12 @@
 import Foundation
 
 protocol WeatherManagerDelegate {
-    func didUpdateWeather(weatherManager:WeatherManager,  weather: WeatherModel)
+    func didUpdateWeather(weatherManager: WeatherManager, weather: WeatherModel)
     func didfailWithError(error: Error)
 }
 
 struct WeatherManager {
-    let weatherURL = "https://api.openweathermap.org/data/2.5/weather?appid=020607c8dd2a5c61369e5d5368ffba85"
+    let weatherURL = "https://api.openweathermap.org/data/2.5/weather?appid=020607c8dd2a5c61369e5d5368ffba85&units=metric"
     let cityURL = "https://api.openweathermap.org/geo/1.0/direct?limit=5&appid=020607c8dd2a5c61369e5d5368ffba85"
 
     var delegate: WeatherManagerDelegate?
@@ -45,7 +45,7 @@ struct WeatherManager {
 
                 if let safeData = data {
                     if let weather = parseJSON(safeData) {
-                        self.delegate?.didUpdateWeather(weatherManager: self ,weather: weather)
+                        self.delegate?.didUpdateWeather(weatherManager: self, weather: weather)
                     }
                 }
             }
@@ -66,7 +66,7 @@ struct WeatherManager {
             let weather = WeatherModel(conditionId: id, cityName: name, temperature: temp)
             return weather
         } catch {
-            self.delegate?.didfailWithError(error: error)
+            delegate?.didfailWithError(error: error)
             return nil
         }
     }
