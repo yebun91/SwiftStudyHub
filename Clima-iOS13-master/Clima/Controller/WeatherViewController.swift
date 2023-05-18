@@ -25,6 +25,9 @@ class WeatherViewController: UIViewController {
         searchTextField.delegate = self
 
         locationManager.requestWhenInUseAuthorization()
+    }
+
+    @IBAction func locationButton(_: UIButton) {
         locationManager.requestLocation()
     }
 }
@@ -34,9 +37,10 @@ class WeatherViewController: UIViewController {
 extension WeatherViewController: CLLocationManagerDelegate {
     func locationManager(_: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
+            locationManager.startUpdatingLocation()
             let lat = location.coordinate.latitude
             let lon = location.coordinate.longitude
-            print("Found user's location: \(lat), \(lon)")
+            weatherManager.fetchWeather(lat: Float(lat), lon: Float(lon))
         }
     }
 
@@ -86,6 +90,7 @@ extension WeatherViewController: WeatherManagerDelegate {
         DispatchQueue.main.async {
             self.temperatureLabel.text = weather.temperatureString
             self.conditionImageView.image = UIImage(systemName: weather.conditionName)
+            self.cityLabel.text = weather.cityName
         }
     }
 
